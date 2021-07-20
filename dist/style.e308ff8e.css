@@ -1,0 +1,30 @@
+#progressionContainers {
+    box-shadow: 5px 5px 10px grey;
+    min-width: fit-content;
+    max-width: 50%;
+    margin: 0 auto;
+}
+body {
+    margin: 0 auto;
+    text-align: center;
+}
+.progression {
+    display: flex;
+    justify-content: space-evenly;
+}
+.chord {
+    padding: 10px;
+    margin: 15px;
+    max-width: 40px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    box-shadow: 3px 2px 5px silver;
+}
+#generate {
+    padding: .4em;
+    margin-top: 1em;
+    border: none;
+    box-shadow: 4px 3px 8px gray;
+}
+
+/*# sourceMappingURL=/style.e308ff8e.css.map */
