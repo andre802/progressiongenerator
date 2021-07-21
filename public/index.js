@@ -1,29 +1,40 @@
-import { Progression } from '@tonaljs/tonal';
+import { Progression, Chord } from '@tonaljs/tonal';
+import Soundfont from 'soundfont-player';
 const majorKey = {
-    tonic: ["I", 'Imaj7'],
+    tonic: ["Imajor", 'Imajor7'],
     supertonic: ["iim", "iim7"],
-    mediant: ['iiim','iiim7'],
-    subdominant: ['IV', 'IVmaj7'],
-    dominant: ['V', 'V7'],
+    mediant: ['iiim', 'iiim7'],
+    subdominant: ['IVmajor', 'IVmajor7'],
+    dominant: ['Vmajor', 'V7'],
     submediant: ['vim', 'vim7'],
     leadingtone: ['viio', 'viio7']
 }
-const tonic = ["C4", "D4", "E4", "F4", "G4", "A4", "B4"];
-const length = 4;
-function generateProgression() {
-    const progression = ["I"];
+// const tonic = ["C", "D", "E", "F", "G", "A", "B"];
+function playChord(notes, ac) {
+    Soundfont.instrument(ac, "acoustic_grand_piano").then((piano) => {
+        for (let i = 0; i < notes.length; i++) {
+            piano.play(notes[i], ac.currentTime).stop(ac.currentTime + 2);
+        }
+    });
+
+
+}
+function playProgression(progression) {
+    const ac = new AudioContext();
+    for (let i = 0; i < progression.length; i++) {
+        setTimeout(() => {
+            const notes = Chord.get(Progression.fromRomanNumerals("C5", [progression[i]])).notes;
+            playChord(notes, ac);
+        }, 1000 * i);
+    }
+}
+function generateProgression(length) {
+    const progression = ["Imajor"];
     for (let i = 1; i < length; i++) {
         let chord = majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][0];
         progression.push(chord);
     }
-    console.log(progression);
-    let tonicNote = tonic[Math.floor(Math.random() * tonic.length)];
-    const leadChords = Progression.fromRomanNumerals(tonicNote, progression);
-    console.log(leadChords)
-    // document.getElementById("progression").innerText = leadChords.join(", ");
-    // document.getElementById("progression").innerHTML += "<br/>";
-    // document.getElementById("progression").innerText += progression.join(", ");
+    const leadChords = Progression.fromRomanNumerals("C4", progression);
     return [progression, leadChords];
 }
-export {generateProgression};
-// document.getElementById("generate").addEventListener("click", generateProgression)
+export { generateProgression, playProgression };

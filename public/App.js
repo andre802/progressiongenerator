@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { generateProgression } from './index';
+import { generateProgression, playProgression } from './index';
 const App = () => {
     const [progression, setProgression] = useState(['I']);
+    const [length, setLength] = useState(4);
+    const handleLength = (e) => {
+        setLength(e.target.value);
+    }
     return (
         <div>
             <h1>Progression Generator</h1>
@@ -22,8 +26,15 @@ const App = () => {
                     </>
                 ) : null}
             </div>
-            <button onClick={() => setProgression(generateProgression())} id="generate">Generate</button>
-
+            <div id="buttons">
+            <button onClick={() => setProgression(generateProgression(length))} id="generate">Generate</button>
+            <button onClick={() => playProgression(progression[0])} id="play">Play</button>
+            </div>
+            <div id="options">
+                <label>Number of Chords: 
+                    <input value={length} onChange={handleLength} min="2" max="6" type="number" />
+                </label>
+            </div>
         </div>
     )
 }
