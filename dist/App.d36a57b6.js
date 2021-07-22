@@ -34744,6 +34744,8 @@ var App = function App() {
       showSaved = _useState6[0],
       setShowSaved = _useState6[1];
 
+  var degrees = ["Imajor", "IMaj7", "iim", "iim7", "iiim", "iiim7", "IVmajor", "IVMaj7", "Vmajor", "VMaj7", "vim", "vim7", "viio", "viio7"];
+
   var handleLength = function handleLength(e) {
     setLength(e.target.value);
   };
@@ -34770,8 +34772,9 @@ var App = function App() {
     id: "saved"
   }, "Saved"), showSaved && saved.length != 0 ? /*#__PURE__*/_react.default.createElement("div", {
     id: "savedDisplay"
-  }, saved.map(function (s) {
+  }, saved.map(function (s, i) {
     return /*#__PURE__*/_react.default.createElement("p", {
+      key: i,
       onClick: function onClick() {
         setProgression(function () {
           if (s == progression) return;
@@ -34782,19 +34785,50 @@ var App = function App() {
         });
       },
       id: "savedProgression"
-    }, s.join("-"));
+    }, s.join("-"), " ", /*#__PURE__*/_react.default.createElement("svg", {
+      onClick: function onClick() {
+        return setSaved(function (prevProg) {
+          return prevProg.filter(function (el) {
+            return s != el;
+          });
+        });
+      },
+      xmlns: "http://www.w3.org/2000/svg",
+      width: "24",
+      height: "24",
+      viewBox: "0 0 24 24"
+    }, /*#__PURE__*/_react.default.createElement("path", {
+      d: "M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"
+    })), " ");
   })) : null), /*#__PURE__*/_react.default.createElement("div", {
     id: "progressionContainers"
-  }, progression != undefined && progression.length == 2 ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+  }, progression != undefined && progression.length == 2 && progression[0].length == length && progression[0].length == progression[1].length ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
     className: "progression"
-  }, progression[0].map(function (chord) {
-    return /*#__PURE__*/_react.default.createElement("span", {
-      className: "chord"
-    }, chord);
+  }, progression[0].map(function (chord, i) {
+    return /*#__PURE__*/_react.default.createElement("select", {
+      key: i,
+      onChange: function onChange(e) {
+        var newChord = e.target.value;
+
+        if (chord != newChord) {
+          var copy = progression[0];
+          copy[i] = newChord;
+          setProgression([copy, _tonal.Progression.fromRomanNumerals("C", copy)]);
+        }
+      },
+      className: "chord",
+      value: chord
+    }, degrees.map(function (d, j) {
+      return /*#__PURE__*/_react.default.createElement("option", {
+        key: j,
+        value: d
+      }, d);
+    }));
   })), /*#__PURE__*/_react.default.createElement("div", {
     className: "progression"
-  }, progression[1].map(function (chord) {
+  }, progression[1].map(function (chord, i) {
     return /*#__PURE__*/_react.default.createElement("span", {
+      key: i,
       className: "chord"
     }, chord);
   })), /*#__PURE__*/_react.default.createElement("button", {
@@ -34853,7 +34887,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53007" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56733" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
