@@ -35,7 +35,7 @@ function generateProgression(length) {
         progression.push(chord);
     }
     
-    const leadChords = Progression.fromRomanNumerals("C4", progression);
+    const leadChords = Progression.fromRomanNumerals("C", progression);
     return [progression, leadChords];
 }
 export { generateProgression, playProgression };

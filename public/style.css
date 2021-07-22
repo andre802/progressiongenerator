@@ -1,10 +1,13 @@
-
+* {
+    margin: 0;
+}
 body {
     margin: 0 auto;
     text-align: center;
     width: 100vw;
 }
-h1 {
+
+header {
     padding: .3em;
     box-shadow: 2px 3px 8px grey;
     margin-top: 0;
@@ -13,7 +16,7 @@ h1 {
     box-shadow: 5px 5px 10px grey;
     min-width: fit-content;
     max-width: 50%;
-    margin: 0 auto;
+    margin: 1em auto;
 }
 .progression {
     display: flex;
@@ -34,13 +37,17 @@ h1 {
 #buttons {
     margin-top: 1em;
 }
-#buttons button {
+button {
     padding: .4em;
     margin: 1em .5em;
     border: none;
     box-shadow: 4px 3px 8px gray;
     transition: .1s ease-in-out all;
-
+}
+button:active {
+    background-color: black;
+    color: white;
+    border-color: maroon;
 }
 #options {
     padding: 1em;
@@ -53,4 +60,31 @@ input[type="number"] {
     margin-left: 1em;
     box-shadow: 3px 3px 5px silver;
     border: 1px solid gray;
+}
+#savedDisplay {
+    width: max-content;
+    height: min-content;
+    background-color: black;
+    color: white;
+    position: fixed;
+    padding: 1em;
+    border-radius: 3px;
+    left: 60vw;
+    top: 1em;
+}
+#savedProgression {
+    background: white;
+    color: black;
+    padding: .2em;
+    border-radius: 3px;
+    border: 1px solid white;
+    box-shadow: 2px 2px 5px gray;;
+    margin: 1em 0;
+}
+
+@media (max-width: 475px) {
+    #savedDisplay {
+        left: 0;
+        width: 7em;
+    }
 }
