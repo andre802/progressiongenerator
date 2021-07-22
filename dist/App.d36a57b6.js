@@ -34646,11 +34646,11 @@ var _soundfontPlayer = _interopRequireDefault(require("soundfont-player"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var majorKey = {
-  tonic: ["Imajor", 'Imajor7'],
+  tonic: ["Imajor", 'IMaj7'],
   supertonic: ["iim", "iim7"],
   mediant: ['iiim', 'iiim7'],
-  subdominant: ['IVmajor', 'IVmajor7'],
-  dominant: ['Vmajor', 'V7'],
+  subdominant: ['IVmajor', 'IVMaj7'],
+  dominant: ['Vmajor', 'VMaj7'],
   submediant: ['vim', 'vim7'],
   leadingtone: ['viio', 'viio7']
 }; // const tonic = ["C", "D", "E", "F", "G", "A", "B"];
@@ -34683,7 +34683,7 @@ function generateProgression(length) {
   var progression = ["Imajor"];
 
   for (var i = 1; i < length; i++) {
-    var chord = majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][0];
+    var chord = majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][Math.floor(Math.random() * 2)];
     progression.push(chord);
   }
 
@@ -34719,7 +34719,7 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var App = function App() {
-  var _useState = (0, _react.useState)(['I']),
+  var _useState = (0, _react.useState)(['Imajor']),
       _useState2 = _slicedToArray(_useState, 2),
       progression = _useState2[0],
       setProgression = _useState2[1];
@@ -34799,7 +34799,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54801" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57695" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

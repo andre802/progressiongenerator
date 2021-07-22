@@ -1,11 +1,11 @@
 import { Progression, Chord } from '@tonaljs/tonal';
 import Soundfont from 'soundfont-player';
 const majorKey = {
-    tonic: ["Imajor", 'Imajor7'],
+    tonic: ["Imajor", 'IMaj7'],
     supertonic: ["iim", "iim7"],
     mediant: ['iiim', 'iiim7'],
-    subdominant: ['IVmajor', 'IVmajor7'],
-    dominant: ['Vmajor', 'V7'],
+    subdominant: ['IVmajor', 'IVMaj7'],
+    dominant: ['Vmajor', 'VMaj7'],
     submediant: ['vim', 'vim7'],
     leadingtone: ['viio', 'viio7']
 }
@@ -31,9 +31,10 @@ function playProgression(progression) {
 function generateProgression(length) {
     const progression = ["Imajor"];
     for (let i = 1; i < length; i++) {
-        let chord = majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][0];
+        let chord = majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][Math.floor(Math.random() * 2)];
         progression.push(chord);
     }
+    
     const leadChords = Progression.fromRomanNumerals("C4", progression);
     return [progression, leadChords];
 }

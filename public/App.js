@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { generateProgression, playProgression } from './index';
 const App = () => {
-    const [progression, setProgression] = useState(['I']);
+    const [progression, setProgression] = useState(['Imajor']);
     const [length, setLength] = useState(4);
     const handleLength = (e) => {
         setLength(e.target.value);

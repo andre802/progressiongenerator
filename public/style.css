@@ -1,12 +1,19 @@
+
+body {
+    margin: 0 auto;
+    text-align: center;
+    width: 100vw;
+}
+h1 {
+    padding: .3em;
+    box-shadow: 2px 3px 8px grey;
+    margin-top: 0;
+}
 #progressionContainers {
     box-shadow: 5px 5px 10px grey;
     min-width: fit-content;
     max-width: 50%;
     margin: 0 auto;
-}
-body {
-    margin: 0 auto;
-    text-align: center;
 }
 .progression {
     display: flex;
@@ -19,13 +26,31 @@ body {
     border: 1px solid silver;
     border-radius: 5px;
     box-shadow: 3px 2px 5px silver;
+    transition: .1s ease-in-out all;
+}
+.chord:hover, button:hover {
+    transform: scale(1.05)
+}
+#buttons {
+    margin-top: 1em;
 }
 #buttons button {
     padding: .4em;
     margin: 1em .5em;
     border: none;
     box-shadow: 4px 3px 8px gray;
+    transition: .1s ease-in-out all;
+
 }
 #options {
-    margin-top: 1em;
+    padding: 1em;
+    box-shadow: 3px 3px 5px silver;
+    width: fit-content;
+    margin: 0 auto;
+}
+input[type="number"] {
+    width: 2em;
+    margin-left: 1em;
+    box-shadow: 3px 3px 5px silver;
+    border: 1px solid gray;
 }
