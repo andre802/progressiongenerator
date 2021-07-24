@@ -34650,10 +34650,10 @@ var majorKey = {
   supertonic: ["iim", "iim7"],
   mediant: ['iiim', 'iiim7'],
   subdominant: ['IVmajor', 'IVMaj7'],
-  dominant: ['Vmajor', 'VMaj7'],
+  dominant: ['Vmajor', 'V7'],
   submediant: ['vim', 'vim7'],
   leadingtone: ['viio', 'viio7']
-}; // const tonic = ["C", "D", "E", "F", "G", "A", "B"];
+};
 
 function playChord(notes, ac) {
   _soundfontPlayer.default.instrument(ac, "acoustic_grand_piano").then(function (piano) {
@@ -34680,14 +34680,17 @@ function playProgression(progression) {
 }
 
 function generateProgression(length) {
-  var progression = ["Imajor"];
+  var tonic = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "C";
+  var tonicIsFirst = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+  var progression;
+  tonicIsFirst ? progression = ["Imajor"] : progression = [majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][Math.floor(Math.random() * 2)]];
 
   for (var i = 1; i < length; i++) {
     var chord = majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][Math.floor(Math.random() * 2)];
     progression.push(chord);
   }
 
-  var leadChords = _tonal.Progression.fromRomanNumerals("C", progression);
+  var leadChords = _tonal.Progression.fromRomanNumerals(tonic, progression);
 
   return [progression, leadChords];
 }
@@ -34744,16 +34747,32 @@ var App = function App() {
       showSaved = _useState6[0],
       setShowSaved = _useState6[1];
 
+  var _useState7 = (0, _react.useState)("C"),
+      _useState8 = _slicedToArray(_useState7, 2),
+      tonic = _useState8[0],
+      setTonic = _useState8[1];
+
+  var _useState9 = (0, _react.useState)("false"),
+      _useState10 = _slicedToArray(_useState9, 2),
+      tonicIsFirst = _useState10[0],
+      setTonicIsFirst = _useState10[1];
+
   var degrees = ["Imajor", "IMaj7", "iim", "iim7", "iiim", "iiim7", "IVmajor", "IVMaj7", "Vmajor", "VMaj7", "vim", "vim7", "viio", "viio7"];
 
   var handleLength = function handleLength(e) {
     setLength(e.target.value);
   };
 
-  var _useState7 = (0, _react.useState)([]),
-      _useState8 = _slicedToArray(_useState7, 2),
-      saved = _useState8[0],
-      setSaved = _useState8[1];
+  var tonicOptions = ["C", "D", "E", "F", "G", "A", "B"];
+
+  var changeTonic = function changeTonic(e) {
+    setTonic(e.target.value);
+  };
+
+  var _useState11 = (0, _react.useState)([]),
+      _useState12 = _slicedToArray(_useState11, 2),
+      saved = _useState12[0],
+      setSaved = _useState12[1];
 
   function save() {
     if (progression[0].length != length) return;
@@ -34779,7 +34798,7 @@ var App = function App() {
         setProgression(function () {
           if (s == progression) return;
 
-          var lead = _tonal.Progression.fromRomanNumerals("C", s);
+          var lead = _tonal.Progression.fromRomanNumerals(tonic, s);
 
           setProgression([s, lead]);
         });
@@ -34813,7 +34832,7 @@ var App = function App() {
         if (chord != newChord) {
           var copy = progression[0];
           copy[i] = newChord;
-          setProgression([copy, _tonal.Progression.fromRomanNumerals("C", copy)]);
+          setProgression([copy, _tonal.Progression.fromRomanNumerals(tonic, copy)]);
         }
       },
       className: "chord",
@@ -34839,7 +34858,7 @@ var App = function App() {
     id: "buttons"
   }, /*#__PURE__*/_react.default.createElement("button", {
     onClick: function onClick() {
-      return setProgression((0, _index.generateProgression)(length));
+      return setProgression((0, _index.generateProgression)(length, tonic, tonicIsFirst));
     },
     id: "generate"
   }, "Generate"), /*#__PURE__*/_react.default.createElement("button", {
@@ -34847,7 +34866,21 @@ var App = function App() {
       return (0, _index.playProgression)(progression[0]);
     },
     id: "play"
-  }, "Play")), /*#__PURE__*/_react.default.createElement("div", {
+  }, "Play"), /*#__PURE__*/_react.default.createElement("button", {
+    onClick: function onClick() {
+      return setTonicIsFirst(function (prev) {
+        return !prev;
+      });
+    }
+  }, tonicIsFirst ? "First chord is Tonic" : "First chord is Random"), /*#__PURE__*/_react.default.createElement("select", {
+    title: "Change the tonic, or the first degree of the scale",
+    value: tonic,
+    onChange: changeTonic
+  }, tonicOptions.map(function (t) {
+    return /*#__PURE__*/_react.default.createElement("option", {
+      value: t
+    }, t);
+  }))), /*#__PURE__*/_react.default.createElement("div", {
     id: "options"
   }, /*#__PURE__*/_react.default.createElement("label", null, "Number of Chords:", /*#__PURE__*/_react.default.createElement("input", {
     value: length,
@@ -34887,7 +34920,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56733" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54965" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

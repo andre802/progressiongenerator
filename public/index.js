@@ -5,11 +5,10 @@ const majorKey = {
     supertonic: ["iim", "iim7"],
     mediant: ['iiim', 'iiim7'],
     subdominant: ['IVmajor', 'IVMaj7'],
-    dominant: ['Vmajor', 'VMaj7'],
+    dominant: ['Vmajor', 'V7'],
     submediant: ['vim', 'vim7'],
     leadingtone: ['viio', 'viio7']
 }
-// const tonic = ["C", "D", "E", "F", "G", "A", "B"];
 function playChord(notes, ac) {
     Soundfont.instrument(ac, "acoustic_grand_piano").then((piano) => {
         for (let i = 0; i < notes.length; i++) {
@@ -28,14 +27,15 @@ function playProgression(progression) {
         }, 1000 * i);
     }
 }
-function generateProgression(length) {
-    const progression = ["Imajor"];
+function generateProgression(length, tonic = "C", tonicIsFirst = true) {
+    let progression;
+    tonicIsFirst ? progression = ["Imajor"] : progression = [majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][Math.floor(Math.random() * 2)]];
     for (let i = 1; i < length; i++) {
         let chord = majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][Math.floor(Math.random() * 2)];
         progression.push(chord);
     }
     
-    const leadChords = Progression.fromRomanNumerals("C", progression);
+    const leadChords = Progression.fromRomanNumerals(tonic, progression);
     return [progression, leadChords];
 }
 export { generateProgression, playProgression };
