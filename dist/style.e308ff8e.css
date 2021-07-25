@@ -37,7 +37,7 @@ header {
 #buttons {
     margin-top: 1em;
 }
-button {
+button, select {
     padding: .4em;
     margin: 1em .5em;
     border: none;
@@ -101,6 +101,19 @@ svg:active {
     #savedDisplay {
         left: 0;
         width: 7em;
+    }
+    #progressionContainers {
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+    #progressionContainers * {
+        padding: 10px;
+        margin: 0;
+        width: fit-content;
+    }
+    .progression {
+        display: flex;
+        flex-direction: column;
     }
 }
 

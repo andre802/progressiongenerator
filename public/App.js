@@ -9,13 +9,26 @@ const App = () => {
     const [showSaved, setShowSaved] = useState(false);
     const [tonic, setTonic] = useState("C");
     const [tonicIsFirst, setTonicIsFirst] = useState("false");
-
+    const instruments = {
+        "Grand Piano": 'acoustic_grand_piano',
+        "Electric Piano":'electric_grand_piano',
+        "Acoustic Bass": 'acoustic_bass',
+        "Synth Bass": 'synth_bass_1',
+        "Choir Aahs": "choir_aahs",
+       "Acoustic Guitar": "acoustic_guitar_nylon",
+        "Electric Guitar": "electric_guitar_clean"
+    }
+    const [instrument, setInstrument] = useState("Grand Piano");
+    
     const handleLength = (e) => {
         setLength(e.target.value);
     }
-    const tonicOptions = ["C", "D", "E", "F", "G", "A", "B"];
+    const tonicOptions = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "B#"];
     const changeTonic = (e) => {
         setTonic(e.target.value);
+    }
+    const changeInstrument = (e) => {
+        setInstrument(e.target.value);
     }
     const changeChord = (chord, newChord, i) => {
         if (chord != newChord) {
@@ -61,14 +74,23 @@ const App = () => {
             <ProgressionCmpt setProgression={changeChord} progression={progression} length={length} />
             <div id="buttons">
                 <button onClick={() => setProgression(generateProgression(length, tonic, tonicIsFirst))} id="generate">Generate</button>
-                <button onClick={() => playProgression(progression[0])} id="play">Play</button>
+                <button onClick={() => playProgression(instruments[instrument], progression[0], tonic)} id="play">Play</button>
                 <button onClick={() => setTonicIsFirst(prev => !prev)}>{tonicIsFirst ? "First chord is Tonic" : "First chord is Random"}</button>
                 <button onClick={() => save()}>Save</button>
                 <select title="Change the tonic, or the first degree of the scale" value={tonic} onChange={changeTonic}>{tonicOptions.map(t => {
                     return (
-                        <option value={t}>{t}</option>
+                        <option key={t} value={t}>{t}</option>
                     )
                 })}</select>
+                <select value={instrument} onChange={changeInstrument} >{
+                    Object.keys(instruments).map(key =>{
+                        return( 
+                            <option value={key} key={key}>{key}</option>
+                        )
+                    })
+                }
+
+                </select>
             </div>
             <div id="options">
                 <label>Number of Chords:

@@ -33216,7 +33216,7 @@ var ProgressionCmpt = function ProgressionCmpt(_ref) {
   var progression = _ref.progression,
       length = _ref.length,
       setProgression = _ref.setProgression;
-  var degrees = ["Imajor", "IMaj7", "im", 'im7', 'imM7', "iim", "iim7", 'IImajor', 'IIm7', 'II7', "iiim", "iiim7", "IIImajor", "IIImaj7", "III7", "IVmajor", "IVMaj7", "V7", "ivm", "ivm7", "Vmajor", "VMaj7", "vim", "vim7", "VImajor", "viio", "viio7", "VIImajor"];
+  var degrees = ["Imajor", "IMaj7", "im", 'im7', 'imM7', "iim", "iim7", 'IImajor', 'IIm7', 'II7', "IIIbmajor", "iiim", "iiim7", "IIImajor", "IIImaj7", "III7", "IVmajor", "IVMaj7", "V7", "ivm", "ivm7", "Vmajor", "VMaj7", "vim", "vim7", "VImajor", "viio", "viio7", "VIImajor"];
   return /*#__PURE__*/_react.default.createElement("div", {
     id: "progressionContainers"
   }, progression != undefined && progression.length == 2 && progression[0].length == length && progression[0].length == progression[1].length ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
@@ -34691,29 +34691,29 @@ var _soundfontPlayer = _interopRequireDefault(require("soundfont-player"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var degrees = ["Imajor", "IMaj7", "im", 'im7', 'imM7', "iim", "iim7", 'IImajor', 'IIm7', 'II7', "iiim", "iiim7", "IIImajor", "IIImaj7", "III7", "IVmajor", "IVMaj7", "V7", "ivm", "ivm7", "Vmajor", "VMaj7", "vim", "vim7", "VImajor", "viio", "viio7", "VIImajor"];
+var degrees = ["Imajor", "IMaj7", "im", 'im7', 'imM7', "iim", "iim7", 'IImajor', 'IIm7', 'II7', "IIIbmajor", "iiim", "iiim7", "IIImajor", "IIImaj7", "III7", "IVmajor", "IVMaj7", "V7", "ivm", "ivm7", "Vmajor", "VMaj7", "vim", "vim7", "VImajor", "viio", "viio7", "VIImajor"];
 
-function playChord(notes, ac) {
-  _soundfontPlayer.default.instrument(ac, "acoustic_grand_piano").then(function (piano) {
+function playChord(instrument, notes, ac) {
+  _soundfontPlayer.default.instrument(ac, instrument).then(function (piano) {
     for (var i = 0; i < notes.length; i++) {
       piano.play(notes[i], ac.currentTime).stop(ac.currentTime + 2);
     }
   });
 }
 
-function playProgression(progression) {
+function playProgression(instrument, progression, tonic) {
   var ac = new AudioContext();
 
   var _loop = function _loop(i) {
     setTimeout(function () {
-      var chord = _tonal.Chord.get(_tonal.Progression.fromRomanNumerals("C", [progression[i]]));
+      var chord = _tonal.Chord.get(_tonal.Progression.fromRomanNumerals(tonic, [progression[i]]));
 
-      var tonic = chord.notes[0];
+      var firstNote = chord.notes[0];
       var type = chord.type;
 
-      var notes = _tonal.Chord.getChord(type, tonic + "5").notes;
+      var notes = _tonal.Chord.getChord(type, firstNote + "5").notes;
 
-      playChord(notes, ac);
+      playChord(instrument, notes, ac);
     }, 1000 * i);
   };
 
@@ -34802,14 +34802,33 @@ var App = function App() {
       tonicIsFirst = _useState10[0],
       setTonicIsFirst = _useState10[1];
 
+  var instruments = {
+    "Grand Piano": 'acoustic_grand_piano',
+    "Electric Piano": 'electric_grand_piano',
+    "Acoustic Bass": 'acoustic_bass',
+    "Synth Bass": 'synth_bass_1',
+    "Choir Aahs": "choir_aahs",
+    "Acoustic Guitar": "acoustic_guitar_nylon",
+    "Electric Guitar": "electric_guitar_clean"
+  };
+
+  var _useState11 = (0, _react.useState)("Grand Piano"),
+      _useState12 = _slicedToArray(_useState11, 2),
+      instrument = _useState12[0],
+      setInstrument = _useState12[1];
+
   var handleLength = function handleLength(e) {
     setLength(e.target.value);
   };
 
-  var tonicOptions = ["C", "D", "E", "F", "G", "A", "B"];
+  var tonicOptions = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "B#"];
 
   var changeTonic = function changeTonic(e) {
     setTonic(e.target.value);
+  };
+
+  var changeInstrument = function changeInstrument(e) {
+    setInstrument(e.target.value);
   };
 
   var changeChord = function changeChord(chord, newChord, i) {
@@ -34854,10 +34873,10 @@ var App = function App() {
     }));
   };
 
-  var _useState11 = (0, _react.useState)([]),
-      _useState12 = _slicedToArray(_useState11, 2),
-      saved = _useState12[0],
-      setSaved = _useState12[1];
+  var _useState13 = (0, _react.useState)([]),
+      _useState14 = _slicedToArray(_useState13, 2),
+      saved = _useState14[0],
+      setSaved = _useState14[1];
 
   function save() {
     if (progression[0].length != length) return;
@@ -34887,7 +34906,7 @@ var App = function App() {
     id: "generate"
   }, "Generate"), /*#__PURE__*/_react.default.createElement("button", {
     onClick: function onClick() {
-      return (0, _index.playProgression)(progression[0]);
+      return (0, _index.playProgression)(instruments[instrument], progression[0], tonic);
     },
     id: "play"
   }, "Play"), /*#__PURE__*/_react.default.createElement("button", {
@@ -34906,8 +34925,17 @@ var App = function App() {
     onChange: changeTonic
   }, tonicOptions.map(function (t) {
     return /*#__PURE__*/_react.default.createElement("option", {
+      key: t,
       value: t
     }, t);
+  })), /*#__PURE__*/_react.default.createElement("select", {
+    value: instrument,
+    onChange: changeInstrument
+  }, Object.keys(instruments).map(function (key) {
+    return /*#__PURE__*/_react.default.createElement("option", {
+      value: key,
+      key: key
+    }, key);
   }))), /*#__PURE__*/_react.default.createElement("div", {
     id: "options"
   }, /*#__PURE__*/_react.default.createElement("label", null, "Number of Chords:", /*#__PURE__*/_react.default.createElement("input", {
@@ -34948,7 +34976,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61146" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60616" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
