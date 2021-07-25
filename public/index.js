@@ -1,14 +1,6 @@
 import { Progression, Chord } from '@tonaljs/tonal';
 import Soundfont from 'soundfont-player';
-const majorKey = {
-    tonic: ["Imajor", 'IMaj7'],
-    supertonic: ["iim", "iim7"],
-    mediant: ['iiim', 'iiim7'],
-    subdominant: ['IVmajor', 'IVMaj7'],
-    dominant: ['Vmajor', 'V7'],
-    submediant: ['vim', 'vim7'],
-    leadingtone: ['viio', 'viio7']
-}
+const degrees = ["Imajor", "IMaj7", "im", 'im7','imM7', "iim", "iim7", 'IImajor', 'IIm7', 'II7', "iiim", "iiim7", "IIImajor", "IIImaj7","III7", "IVmajor", "IVMaj7", "V7","ivm", "ivm7", "Vmajor", "VMaj7", "vim", "vim7", "VImajor","viio", "viio7", "VIImajor"];
 function playChord(notes, ac) {
     Soundfont.instrument(ac, "acoustic_grand_piano").then((piano) => {
         for (let i = 0; i < notes.length; i++) {
@@ -22,16 +14,19 @@ function playProgression(progression) {
     const ac = new AudioContext();
     for (let i = 0; i < progression.length; i++) {
         setTimeout(() => {
-            const notes = Chord.get(Progression.fromRomanNumerals("C5", [progression[i]])).notes;
+            const chord = Chord.get(Progression.fromRomanNumerals("C", [progression[i]]))
+            const tonic = chord.notes[0];
+            const type = chord.type;
+            const notes = Chord.getChord(type, tonic + "5").notes;
             playChord(notes, ac);
         }, 1000 * i);
     }
 }
 function generateProgression(length, tonic = "C", tonicIsFirst = true) {
     let progression;
-    tonicIsFirst ? progression = ["Imajor"] : progression = [majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][Math.floor(Math.random() * 2)]];
+    tonicIsFirst ? progression = ["Imajor"] : progression = [degrees[Math.floor(Math.random() * degrees.length)]];
     for (let i = 1; i < length; i++) {
-        let chord = majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][Math.floor(Math.random() * 2)];
+        let chord = degrees[Math.floor(Math.random() * degrees.length)];
         progression.push(chord);
     }
     

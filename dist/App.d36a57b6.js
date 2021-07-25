@@ -33200,7 +33200,53 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/audio-loader/lib/base64.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"ProgressionCmpt.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ProgressionCmpt = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ProgressionCmpt = function ProgressionCmpt(_ref) {
+  var progression = _ref.progression,
+      length = _ref.length,
+      setProgression = _ref.setProgression;
+  var degrees = ["Imajor", "IMaj7", "im", 'im7', 'imM7', "iim", "iim7", 'IImajor', 'IIm7', 'II7', "iiim", "iiim7", "IIImajor", "IIImaj7", "III7", "IVmajor", "IVMaj7", "V7", "ivm", "ivm7", "Vmajor", "VMaj7", "vim", "vim7", "VImajor", "viio", "viio7", "VIImajor"];
+  return /*#__PURE__*/_react.default.createElement("div", {
+    id: "progressionContainers"
+  }, progression != undefined && progression.length == 2 && progression[0].length == length && progression[0].length == progression[1].length ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+    className: "progression"
+  }, progression[0].map(function (chord, i) {
+    return /*#__PURE__*/_react.default.createElement("select", {
+      key: i,
+      onChange: function onChange(e) {
+        return setProgression(chord, e.target.value, i);
+      },
+      className: "chord",
+      value: chord
+    }, degrees.map(function (d, j) {
+      return /*#__PURE__*/_react.default.createElement("option", {
+        key: j,
+        value: d
+      }, d);
+    }));
+  })), /*#__PURE__*/_react.default.createElement("div", {
+    className: "progression"
+  }, progression[1].map(function (chord, i) {
+    return /*#__PURE__*/_react.default.createElement("span", {
+      key: i,
+      className: "chord"
+    }, chord);
+  }))) : null);
+};
+
+exports.ProgressionCmpt = ProgressionCmpt;
+},{"react":"../node_modules/react/index.js"}],"../node_modules/audio-loader/lib/base64.js":[function(require,module,exports) {
 'use strict'
 
 // DECODE UTILITIES
@@ -34645,15 +34691,7 @@ var _soundfontPlayer = _interopRequireDefault(require("soundfont-player"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var majorKey = {
-  tonic: ["Imajor", 'IMaj7'],
-  supertonic: ["iim", "iim7"],
-  mediant: ['iiim', 'iiim7'],
-  subdominant: ['IVmajor', 'IVMaj7'],
-  dominant: ['Vmajor', 'V7'],
-  submediant: ['vim', 'vim7'],
-  leadingtone: ['viio', 'viio7']
-};
+var degrees = ["Imajor", "IMaj7", "im", 'im7', 'imM7', "iim", "iim7", 'IImajor', 'IIm7', 'II7', "iiim", "iiim7", "IIImajor", "IIImaj7", "III7", "IVmajor", "IVMaj7", "V7", "ivm", "ivm7", "Vmajor", "VMaj7", "vim", "vim7", "VImajor", "viio", "viio7", "VIImajor"];
 
 function playChord(notes, ac) {
   _soundfontPlayer.default.instrument(ac, "acoustic_grand_piano").then(function (piano) {
@@ -34668,7 +34706,12 @@ function playProgression(progression) {
 
   var _loop = function _loop(i) {
     setTimeout(function () {
-      var notes = _tonal.Chord.get(_tonal.Progression.fromRomanNumerals("C5", [progression[i]])).notes;
+      var chord = _tonal.Chord.get(_tonal.Progression.fromRomanNumerals("C", [progression[i]]));
+
+      var tonic = chord.notes[0];
+      var type = chord.type;
+
+      var notes = _tonal.Chord.getChord(type, tonic + "5").notes;
 
       playChord(notes, ac);
     }, 1000 * i);
@@ -34683,10 +34726,10 @@ function generateProgression(length) {
   var tonic = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "C";
   var tonicIsFirst = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
   var progression;
-  tonicIsFirst ? progression = ["Imajor"] : progression = [majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][Math.floor(Math.random() * 2)]];
+  tonicIsFirst ? progression = ["Imajor"] : progression = [degrees[Math.floor(Math.random() * degrees.length)]];
 
   for (var i = 1; i < length; i++) {
-    var chord = majorKey[Object.keys(majorKey)[Math.floor(Math.random() * Object.keys(majorKey).length)]][Math.floor(Math.random() * 2)];
+    var chord = degrees[Math.floor(Math.random() * degrees.length)];
     progression.push(chord);
   }
 
@@ -34702,6 +34745,8 @@ var _tonal = require("@tonaljs/tonal");
 var _react = _interopRequireWildcard(require("react"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
+
+var _ProgressionCmpt = require("./ProgressionCmpt");
 
 var _index = require("./index");
 
@@ -34757,8 +34802,6 @@ var App = function App() {
       tonicIsFirst = _useState10[0],
       setTonicIsFirst = _useState10[1];
 
-  var degrees = ["Imajor", "IMaj7", "iim", "iim7", "iiim", "iiim7", "IVmajor", "IVMaj7", "Vmajor", "VMaj7", "vim", "vim7", "viio", "viio7"];
-
   var handleLength = function handleLength(e) {
     setLength(e.target.value);
   };
@@ -34767,6 +34810,48 @@ var App = function App() {
 
   var changeTonic = function changeTonic(e) {
     setTonic(e.target.value);
+  };
+
+  var changeChord = function changeChord(chord, newChord, i) {
+    if (chord != newChord) {
+      var copy = progression[0];
+      copy[i] = newChord;
+      setProgression([copy, _tonal.Progression.fromRomanNumerals(tonic, copy)]);
+    }
+  };
+
+  var showDisplay = function showDisplay() {
+    return /*#__PURE__*/_react.default.createElement("div", {
+      id: "savedDisplay"
+    }, saved.map(function (s, i) {
+      return /*#__PURE__*/_react.default.createElement("p", {
+        key: i,
+        onClick: function onClick() {
+          setProgression(function () {
+            if (s == progression) return;
+
+            var lead = _tonal.Progression.fromRomanNumerals(tonic, s);
+
+            setProgression([s, lead]);
+          });
+        },
+        id: "savedProgression"
+      }, s.join("-"), " ", /*#__PURE__*/_react.default.createElement("svg", {
+        onClick: function onClick() {
+          return setSaved(function (prevProg) {
+            return prevProg.filter(function (el) {
+              return s != el;
+            });
+          });
+        },
+        xmlns: "http://www.w3.org/2000/svg",
+        width: "24",
+        height: "24",
+        viewBox: "0 0 24 24"
+      }, /*#__PURE__*/_react.default.createElement("path", {
+        d: "M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"
+      })), " ");
+    }));
   };
 
   var _useState11 = (0, _react.useState)([]),
@@ -34789,72 +34874,11 @@ var App = function App() {
       });
     },
     id: "saved"
-  }, "Saved"), showSaved && saved.length != 0 ? /*#__PURE__*/_react.default.createElement("div", {
-    id: "savedDisplay"
-  }, saved.map(function (s, i) {
-    return /*#__PURE__*/_react.default.createElement("p", {
-      key: i,
-      onClick: function onClick() {
-        setProgression(function () {
-          if (s == progression) return;
-
-          var lead = _tonal.Progression.fromRomanNumerals(tonic, s);
-
-          setProgression([s, lead]);
-        });
-      },
-      id: "savedProgression"
-    }, s.join("-"), " ", /*#__PURE__*/_react.default.createElement("svg", {
-      onClick: function onClick() {
-        return setSaved(function (prevProg) {
-          return prevProg.filter(function (el) {
-            return s != el;
-          });
-        });
-      },
-      xmlns: "http://www.w3.org/2000/svg",
-      width: "24",
-      height: "24",
-      viewBox: "0 0 24 24"
-    }, /*#__PURE__*/_react.default.createElement("path", {
-      d: "M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"
-    })), " ");
-  })) : null), /*#__PURE__*/_react.default.createElement("div", {
-    id: "progressionContainers"
-  }, progression != undefined && progression.length == 2 && progression[0].length == length && progression[0].length == progression[1].length ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
-    className: "progression"
-  }, progression[0].map(function (chord, i) {
-    return /*#__PURE__*/_react.default.createElement("select", {
-      key: i,
-      onChange: function onChange(e) {
-        var newChord = e.target.value;
-
-        if (chord != newChord) {
-          var copy = progression[0];
-          copy[i] = newChord;
-          setProgression([copy, _tonal.Progression.fromRomanNumerals(tonic, copy)]);
-        }
-      },
-      className: "chord",
-      value: chord
-    }, degrees.map(function (d, j) {
-      return /*#__PURE__*/_react.default.createElement("option", {
-        key: j,
-        value: d
-      }, d);
-    }));
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "progression"
-  }, progression[1].map(function (chord, i) {
-    return /*#__PURE__*/_react.default.createElement("span", {
-      key: i,
-      className: "chord"
-    }, chord);
-  })), /*#__PURE__*/_react.default.createElement("button", {
-    onClick: function onClick() {
-      return save();
-    }
-  }, "Save")) : null), /*#__PURE__*/_react.default.createElement("div", {
+  }, "Saved"), showSaved && saved.length != 0 ? showDisplay() : null), /*#__PURE__*/_react.default.createElement(_ProgressionCmpt.ProgressionCmpt, {
+    setProgression: changeChord,
+    progression: progression,
+    length: length
+  }), /*#__PURE__*/_react.default.createElement("div", {
     id: "buttons"
   }, /*#__PURE__*/_react.default.createElement("button", {
     onClick: function onClick() {
@@ -34872,7 +34896,11 @@ var App = function App() {
         return !prev;
       });
     }
-  }, tonicIsFirst ? "First chord is Tonic" : "First chord is Random"), /*#__PURE__*/_react.default.createElement("select", {
+  }, tonicIsFirst ? "First chord is Tonic" : "First chord is Random"), /*#__PURE__*/_react.default.createElement("button", {
+    onClick: function onClick() {
+      return save();
+    }
+  }, "Save"), /*#__PURE__*/_react.default.createElement("select", {
     title: "Change the tonic, or the first degree of the scale",
     value: tonic,
     onChange: changeTonic
@@ -34892,7 +34920,7 @@ var App = function App() {
 };
 
 _reactDom.default.render( /*#__PURE__*/_react.default.createElement(App, null), document.getElementById("root"));
-},{"@tonaljs/tonal":"../node_modules/@tonaljs/tonal/dist/index.es.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","./index":"index.js"}],"../../../../../../../../home/andre/.nvm/versions/node/v16.3.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"@tonaljs/tonal":"../node_modules/@tonaljs/tonal/dist/index.es.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","./ProgressionCmpt":"ProgressionCmpt.js","./index":"index.js"}],"../../../../../../../../home/andre/.nvm/versions/node/v16.3.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -34920,7 +34948,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54965" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61146" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
